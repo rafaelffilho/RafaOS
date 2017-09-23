@@ -18,6 +18,7 @@ install: kernel.bin
 
 clean: 
 	rm *.o
+	rm *.bin
 	rm *.iso
 
 kernel.iso: kernel.bin
