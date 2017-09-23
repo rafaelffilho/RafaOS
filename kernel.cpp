@@ -1,10 +1,11 @@
 #include "types.h"
+#include "gdt.h"
 
 void printf(int8_t* str){
-    uint16_t* VideoMemory = (uint16_t*)0xb8000;
+    uint16_t* VideoMemory = (uint16_t*)0xB8000;
 
     for(int i = 0; str[i] != '\0'; ++i)
-        VideoMemory[i] = (VideoMemory[i] & 0xff00) | str[i];
+        VideoMemory[i] = (VideoMemory[i] & 0xFF00) | str[i];
 }
 
 typedef void (*constructor)();
@@ -17,6 +18,8 @@ extern "C" void callConstructors(){
 
 extern "C" void kernelMain(void* mb_struct, uint32_t magicnumber){
     printf("Just a test! And some afterwords");
+
+	GlobalDescriptorTable gdt;
 
     while(1);
 }
