@@ -1,5 +1,7 @@
-void printf(char* str){
-    unsigned short* VideoMemory = (unsigned short*)0xb8000;
+#include "types.h"
+
+void printf(int8_t* str){
+    uint16_t* VideoMemory = (uint16_t*)0xb8000;
 
     for(int i = 0; str[i] != '\0'; ++i)
         VideoMemory[i] = (VideoMemory[i] & 0xff00) | str[i];
@@ -13,7 +15,7 @@ extern "C" void callConstructors(){
 		(*i)();
 }
 
-extern "C" void kernelMain(void* mb_struct, unsigned int magicnumber){
+extern "C" void kernelMain(void* mb_struct, uint32_t magicnumber){
     printf("Just a test! And some afterwords");
 
     while(1);
