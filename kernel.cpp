@@ -3,7 +3,7 @@
 #include "interrupts.h"
 
 void printf(int8_t* str){
-    uint16_t* VideoMemory = (uint16_t*)0xB8000;
+    static uint16_t* VideoMemory = (uint16_t*)0xB8000;
 
 	static uint8_t x = 0;
 	static uint8_t y = 0;

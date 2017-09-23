@@ -42,9 +42,9 @@ int_bottom:
     popl %ds
     popa    
 
+.global _ZN16InterruptManager22IgnoreInterruptRequestEv
 _ZN16InterruptManager22IgnoreInterruptRequestEv:
-
-
+    
     iret
 
 .data
