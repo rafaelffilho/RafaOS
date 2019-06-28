@@ -31,4 +31,4 @@ kernel.iso: kernel.bin
 	rm -rf iso
 
 run: kernel.iso
-	VirtualBox --startvm "RafaOS" &
+	qemu $< &
