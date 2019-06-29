@@ -3,7 +3,7 @@
 #include "interrupts.h"
 
 void printf(int8_t* str){
-    static uint16_t* VideoMemory = (uint16_t*)0xB8000;
+  static uint16_t* VideoMemory = (uint16_t*)0xB8000;
 
 	static uint8_t x = 0;
 	static uint8_t y = 0;
@@ -33,22 +33,9 @@ void printf(int8_t* str){
 	}
 }
 
-typedef void (*constructor)();
-extern "C" constructor start_ctors;
-extern "C" constructor end_ctors;
-extern "C" void callConstructors(){
-	for(constructor* i = &start_ctors; i != &end_ctors; i++)
-		(*i)();
-}
+extern "C" void kmain(void* mb_struct, uint32_t magicnumber){
+  printf((char*)"\nJust a test!\n");
+	printf((char*)"And some afterwords");	
 
-extern "C" void kernelMain(void* mb_struct, uint32_t magicnumber){
-    printf("\nJust a test!\n");
-	printf("And some afterwords");	
-
-	GlobalDescriptorTable gdt;
-	InterruptManager interrupts(&gdt);
-
-	interrupts.Activate();
-
-    while(1);
+  while(1);
 }

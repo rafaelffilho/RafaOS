@@ -1,17 +1,15 @@
-GPPPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -fno-stack-protector
-ASPARAMS = --32
-LDPARAMS = -melf_i386
+CFLAGS = -std=c++98 -Wall -Werror -m32 -nostdlib -fno-builtin -fno-stack-protector
 
-objects = loader.o gdt.o kernel.o port.o interrupts.o interruptstubs.o
+objects = loader.o kernel.o
 
 %.o: %.cpp
-	g++ $(GPPPARAMS) -o $@ -c $<
+	clang++ $(CFLAGS) -o $@ -c $<
 
 %.o: %.s
-	as $(ASPARAMS) -o $@ $<
+	nasm -o $@ $< -f elf32
 
 kernel.bin: linker.ld $(objects)
-	ld $(LDPARAMS) -T $< -o $@ $(objects)
+	ld.lld -T $< -o $@ $(objects)
 
 install: kernel.bin
 	sudo cp $< /boot/kernel.bin
@@ -26,9 +24,9 @@ kernel.iso: kernel.bin
 	mkdir iso/boot
 	mkdir iso/boot/grub
 	cp $< iso/boot/
-	mv grub.cfg iso/boot/grub/grub.cfg
+	cp grub.cfg iso/boot/grub/grub.cfg
 	grub-mkrescue --output=$@ iso
 	rm -rf iso
 
 run: kernel.iso
-	qemu $< &
+	qemu-system-x86_64 $< &

@@ -1,30 +1,30 @@
-.set MAGIC, 0x1BADB002
-.set FLAGS, (1<<0 | 1<<1)
-.set CHECKSUM, -(MAGIC + FLAGS)
+MAGIC    equ 0x1BADB002
+FLAGS    equ (1<<0 | 1<<1)
+CHECKSUM equ -(MAGIC + FLAGS)
 
-.section .multiboot
-    .long MAGIC
-    .long FLAGS
-    .long CHECKSUM
+section .multiboot
+align 4
+    dd MAGIC
+    dd FLAGS
+    dd CHECKSUM
 
-.section .text
-.extern kernelMain
-.extern callConstructors
-.global loader
+section .text
+global start:function (start.end - start)
+start:
+    mov esp, stack_top
 
-loader:
-    mov $kernel_stack, %esp
-	call callConstructors
-    push %eax
-    push %ebx
-    call kernelMain
+    extern kmain
+    call kmain
 
-_stop:
     cli
+.hang:
     hlt
-    jmp _stop
+    jmp .hang
+.end:
 
-.section .bss
-.space 2*1024*1024 ; # 2 MiB
-kernel_stack:
+section .bss
+align 16
+stack_bottom:
+resb 0x2000 ;; 2 MiB
+stack_top:
 
