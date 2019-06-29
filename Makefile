@@ -1,9 +1,9 @@
-CFLAGS = -std=c++98 -Wall -Werror -m32 -nostdlib -fno-builtin -fno-stack-protector
+CFLAGS = -std=c99 -Wall -Werror -m32 -nostdlib -fno-builtin -fno-stack-protector -ffreestanding
 
 objects = loader.o kernel.o
 
 %.o: %.cpp
-	clang++ $(CFLAGS) -o $@ -c $<
+	clang $(CFLAGS) -o $@ -c $<
 
 %.o: %.s
 	nasm -o $@ $< -f elf32
