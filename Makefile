@@ -1,25 +1,21 @@
 CFLAGS = -std=c99 -Wall -Werror -m32 -nostdlib -fno-builtin -fno-stack-protector -ffreestanding
 
-objects = loader.o kernel.o
+objects = build/loader.o build/main.o
 
-%.o: %.cpp
+build/%.o: src/%.c
 	clang $(CFLAGS) -o $@ -c $<
 
-%.o: %.s
+build/%.o: src/%.s
 	nasm -o $@ $< -f elf32
 
-kernel.bin: linker.ld $(objects)
+build/kernel.bin: src/linker.ld $(objects)
 	ld.lld -T $< -o $@ $(objects)
 
-install: kernel.bin
-	sudo cp $< /boot/kernel.bin
-
 clean: 
-	rm *.o
-	rm *.bin
-	rm *.iso
+	rm build/* &
+	rm kernel.iso &
 
-kernel.iso: kernel.bin
+kernel.iso: build/kernel.bin
 	mkdir iso
 	mkdir iso/boot
 	mkdir iso/boot/grub
@@ -30,3 +26,6 @@ kernel.iso: kernel.bin
 
 run: kernel.iso
 	qemu-system-x86_64 $< &
+
+all: kernel.iso
+	echo "done"

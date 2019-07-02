@@ -25,6 +25,6 @@ start:
 section .bss
 align 16
 stack_bottom:
-resb 0x2000 ;; 2 MiB
+resb 0x2000             ; ; 2 MiB
 stack_top:
 
