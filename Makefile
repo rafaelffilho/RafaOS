@@ -1,6 +1,6 @@
 CFLAGS = -std=c99 -Wall -Werror -m32 -nostdlib -fno-builtin -fno-stack-protector -ffreestanding
 
-objects = build/loader.o build/main.o
+objects = build/loader.o build/main.o build/tty.o
 
 build/%.o: src/%.c
 	clang $(CFLAGS) -o $@ -c $<
