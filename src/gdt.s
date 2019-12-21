@@ -16,3 +16,10 @@ gdt_flush:
 .flush:
   ret
 .end:
+
+global idt_flush:function (idt_flush.end - idt_flush)
+idt_flush:
+  mov eax, [esp+4]
+  lidt [eax]
+  ret
+.end:

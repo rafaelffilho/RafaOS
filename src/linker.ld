@@ -20,9 +20,9 @@ SECTIONS {
 	.bss : {
 		*(.bss)
 	}
-	
+
 	/DISCARD/ : {
 		*(.finit_array*)
-		*(.comment)		
+		*(.comment)
 	}
 }
