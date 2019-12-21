@@ -1,6 +1,6 @@
 CFLAGS = -std=c99 -Wall -Werror -m32 -nostdlib -fno-builtin -fno-stack-protector -ffreestanding
 
-objects = build/loader.o build/main.o build/tty.o
+objects = build/loader.o build/main.o build/tty.o build/gdt.o build/descriptor_table.o
 
 build/%.o: src/%.c
 	clang $(CFLAGS) -o $@ -c $<
@@ -11,7 +11,7 @@ build/%.o: src/%.s
 build/kernel.bin: src/linker.ld $(objects)
 	ld.lld -T $< -o $@ $(objects)
 
-clean: 
+clean:
 	rm build/* &
 	rm kernel.iso &
 
