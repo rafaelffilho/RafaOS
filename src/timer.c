@@ -18,7 +18,6 @@ void init_timer(uint32_t frequency) {
 
 	uint32_t divisor = 1193180 / frequency;
 
-	// outb(0x43, 0x36);
 	outb(0x43, 0x34);
 
 	uint8_t l = (uint8_t)(divisor & 0xFF);
