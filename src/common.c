@@ -7,43 +7,18 @@ int memset(void *ptr, uint32_t val, uint32_t size) {
 	return 0;
 }
 
-void swap(char *x, char *y) {
-	char t = *x;
-
-	*x = *y;
-	*y = t;
+void outb(uint16_t port, uint8_t value) {
+	__asm__ volatile("outb %1, %0" ::"dN"(port), "a"(value));
 }
 
-char *reverse(char *buffer, int i, int j) {
-	while (i < j) swap(&buffer[i++], &buffer[j--]);
-
-	return buffer;
+uint8_t inb(uint16_t port) {
+	uint8_t ret;
+	__asm__ volatile("inb %1, %0" : "=a"(ret) : "dN"(port));
+	return ret;
 }
 
-int32_t abs(int32_t value) { return value < 0 ? -value : value; }
-
-char *itoa(int32_t value, char *buffer, uint32_t base) {
-	if (base < 2 || base > 32) return buffer;
-
-	int n = abs(value);
-
-	int i = 0;
-	while (n) {
-		int r = n % base;
-
-		if (r >= 10)
-			buffer[i++] = 65 + (r - 10);
-		else
-			buffer[i++] = 48 + r;
-
-		n = n / base;
-	}
-
-	if (i == 0) buffer[i++] = '0';
-
-	if (value < 0 && base == 10) buffer[i++] = '-';
-
-	buffer[i++] = '\0';
-
-	return reverse(buffer, 0, i - 1);
+uint16_t inw(uint16_t port) {
+	uint16_t ret;
+	__asm__ volatile("inb %1, %0" : "=a"(ret) : "dN"(port));
+	return ret;
 }

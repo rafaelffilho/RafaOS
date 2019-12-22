@@ -1,6 +1,5 @@
-#include "../include/tty.h"
-
-#include "../include/types.h"
+#include <tty.h>
+#include <types.h>
 
 enum colors {
 	black        = 0x0,
@@ -68,5 +67,15 @@ void printf(char *str) {
 	while (*str != '\0') {
 		put_char(*str);
 		++str;
+	}
+}
+
+void printc(char c) { put_char(c); }
+
+void print_dec(uint32_t value) {
+	uint32_t buff = value;
+	while (buff != 0) {
+		put_char((buff % 10) + 48);
+		buff /= 10;
 	}
 }

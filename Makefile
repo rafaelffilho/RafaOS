@@ -1,17 +1,27 @@
-CFLAGS = -std=c99 -Wall -Werror -m32 -nostdlib -fno-builtin -fno-stack-protector -ffreestanding
+CFLAGS  = -Iinclude -I. -std=c99 -Wall -Werror -m32
+CFLAGS += -fno-stack-protector -ffreestanding -nostdlib -fno-builtin
 
-objects  = build/loader.o build/main.o build/tty.o build/gdt.o
-objects += build/descriptor_table.o build/common.o
-objects += build/isr.o build/interrupts.o
+SOURCES =                \
+	src/common.c           \
+	src/descriptor_table.c \
+	src/gdt.s              \
+	src/interrupts.s       \
+	src/isr.c              \
+	src/loader.s           \
+	src/main.c             \
+	src/timer.c            \
+	src/tty.c
+
+OBJECTS = $(patsubst src/%.s,build/%.o,$(patsubst src/%.c,build/%.o,$(SOURCES)))
 
 build/%.o: src/%.c
-	clang $(CFLAGS) -o $@ -c $<
+	gcc $(CFLAGS) -o $@ -c $<
 
 build/%.o: src/%.s
 	nasm -o $@ $< -f elf32
 
-build/kernel.bin: src/linker.ld $(objects)
-	ld.lld -error-limit=0 -T $< -o $@ $(objects)
+build/kernel.bin: src/linker.ld $(OBJECTS)
+	ld.lld -T $< -o $@ $(OBJECTS)
 
 clean:
 	rm build/* &
@@ -27,7 +37,7 @@ kernel.iso: build/kernel.bin
 	rm -rf iso
 
 run: kernel.iso
-	qemu-system-x86_64 $< &
+	qemu-system-i386 $< &
 
 all: kernel.iso
 	echo "done"
