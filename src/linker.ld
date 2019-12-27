@@ -21,6 +21,8 @@ SECTIONS {
 		*(.bss)
 	}
 
+	end = .;_end = .;__end = .;
+
 	/DISCARD/ : {
 		*(.finit_array*)
 		*(.comment)

@@ -1,4 +1,4 @@
-CFLAGS  = -Iinclude -I. -std=c99 -Wall -Werror -m32
+CFLAGS  = -Iinclude -I. -std=c99 -Wall -m32
 CFLAGS += -fno-stack-protector -ffreestanding -nostdlib -fno-builtin
 
 SOURCES =                \
@@ -7,8 +7,10 @@ SOURCES =                \
 	src/gdt.s              \
 	src/interrupts.s       \
 	src/isr.c              \
+	src/kheap.c            \
 	src/loader.s           \
 	src/main.c             \
+	src/paging.c           \
 	src/timer.c            \
 	src/tty.c
 

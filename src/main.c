@@ -1,4 +1,6 @@
 #include <descriptor_tables.h>
+#include <kheap.h>
+#include <paging.h>
 #include <timer.h>
 #include <tty.h>
 #include <types.h>
@@ -8,8 +10,15 @@ void kmain(void *mb_struct, uint32_t magicnumber) {
 	printf("Hello World!\n");
 	init_descriptor_tables();
 
-	__asm__ volatile ("sti");
+	__asm__ volatile("sti");
 	init_timer(50);
+
+	initialize_paging();
+	printf("Initialized paging!\n");
+
+	uint32_t *ptr           = (uint32_t *) 0xA0000000;
+	uint32_t  do_page_fault = *ptr;
+	(void) do_page_fault;
 
 	for (;;) {}
 }

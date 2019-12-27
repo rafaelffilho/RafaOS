@@ -22,3 +22,14 @@ uint16_t inw(uint16_t port) {
 	__asm__ volatile("inb %1, %0" : "=a"(ret) : "dN"(port));
 	return ret;
 }
+
+void panic(char *text, char *file, int line) {
+	printf("Kernel Panicked at file(");
+	printf(file);
+	printf(") line(");
+	print_dec(line);
+	printf(") with message:\n");
+	printf(text);
+
+	for (;;) {}
+}

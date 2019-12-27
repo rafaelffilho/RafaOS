@@ -5,10 +5,14 @@
 isr_t interrupt_handlers[256];
 
 void isr_handler(registers_t regs) {
-	// TODO: for some reason this shit does not print the interrupt number
 	printf("received interrupt (isr): ");
 	print_dec(regs.int_no);
 	printc('\n');
+
+	if (interrupt_handlers[regs.int_no] != 0) {
+		isr_t handler = interrupt_handlers[regs.int_no];
+		handler(regs);
+	}
 }
 
 void irq_handler(registers_t regs) {
