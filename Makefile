@@ -10,6 +10,7 @@ SOURCES =                \
 	src/kheap.c            \
 	src/loader.s           \
 	src/main.c             \
+	src/ordered_array.c    \
 	src/paging.c           \
 	src/timer.c            \
 	src/tty.c

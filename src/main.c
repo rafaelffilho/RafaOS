@@ -10,6 +10,12 @@ void kmain(void *mb_struct, uint32_t magicnumber) {
 	printf("Hello World!\n");
 	init_descriptor_tables();
 
+	uint32_t a = kmalloc(8);
+	uint32_t b = kmalloc(8);
+
+	kfree(a);
+	kfree(b);
+
 	__asm__ volatile("sti");
 	init_timer(50);
 

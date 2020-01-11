@@ -1,4 +1,5 @@
 #include <common.h>
+#include <kheap.h>
 #include <paging.h>
 
 page_directory_t *kernel_directory  = 0;
@@ -8,6 +9,7 @@ uint32_t *frames;
 uint32_t  nframes;
 
 extern uint32_t placement_address;
+extern heap_t * kheap;
 
 #define INDEX_FROM_BIT(a) (a / 32)
 #define OFFSET_FROM_BIT(a) (a % 32)
@@ -79,9 +81,18 @@ void initialize_paging() {
 	for (int i = 0; i < placement_address; i += 0x1000)
 		alloc_frame(get_page(i, 1, kernel_directory), 0, 0);
 
+	for (int i = KHEAP_START; i < KHEAP_INITIAL_SIZE; i += 0x1000)
+		get_page(i, 1, kernel_directory);
+
+	for (int i = KHEAP_START; i < KHEAP_INITIAL_SIZE; i += 0x1000)
+		alloc_frame(get_page(i, 1, kernel_directory), 0, 0);
+
 	register_interrupt_handler(14, page_fault);
 
 	switch_page_directory(kernel_directory);
+
+	kheap = create_heap(KHEAP_START, KHEAP_START + KHEAP_INITIAL_SIZE, 0xCFFFF000,
+	                    0, 0);
 }
 
 void switch_page_directory(page_directory_t *dir) {
